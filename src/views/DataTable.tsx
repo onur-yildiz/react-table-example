@@ -16,7 +16,7 @@ const DataTable = () => {
         return {
           date: format(
             parse(stat.conract.substring(2), "yyMMddHH", new Date()),
-            "yyyy-MM-dd HH:mm"
+            "dd.MM.yyyy HH:mm"
           ),
           totalTransactionAmount: stat.totalTransactionAmount.toFixed(2),
           totalTransactionFee: stat.totalTransactionFee.toLocaleString(
