@@ -1,12 +1,11 @@
 import { parse, format } from "date-fns";
-import { createRef, useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Column, useSortBy, useTable } from "react-table";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import StatsContext from "../store/statsContext";
 
 const DataTable = () => {
   const { stats } = useContext(StatsContext);
-  const tableRef = createRef<HTMLTableSectionElement>();
 
   const data = useMemo(
     () =>
@@ -52,64 +51,72 @@ const DataTable = () => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useSortBy);
 
-  // prevent selection on double click
-  tableRef.current?.addEventListener(
-    "mousedown",
-    (e) => {
+  useEffect(() => {
+    const tableHeader = document.getElementsByTagName("thead")[0];
+
+    // prevent selection on double click
+    const mouseDownHandler = (e: MouseEvent) => {
       if (e.detail > 1) e.preventDefault();
-    },
-    false
-  );
+    };
+
+    tableHeader.addEventListener("mousedown", mouseDownHandler, false);
+
+    return () => {
+      tableHeader.removeEventListener("mousedown", mouseDownHandler);
+    };
+  }, []);
 
   return (
-    <table className="table" {...getTableProps()}>
-      <thead ref={tableRef} className="table-header">
-        {headerGroups.map((headerGroup) => (
-          <tr
-            className="table-header--row"
-            {...headerGroup.getHeaderGroupProps()}
-          >
-            {headerGroup.headers.map((column) => (
-              <th
-                className="table-header--cell"
-                {...column.getHeaderProps(column.getSortByToggleProps())}
-              >
-                <div>
-                  {column.render("Header")}
-                  <span
-                    className={`table-header--sort-icon${
-                      column.isSorted ? " active" : ""
-                    }`}
-                  >
-                    {column.isSortedDesc ? (
-                      <CaretDownOutlined />
-                    ) : (
-                      <CaretUpOutlined />
-                    )}
-                  </span>
-                </div>
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody className="table-body" {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <tr className="table-body--row" {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return (
-                  <td className="table-body--cell" {...cell.getCellProps()}>
-                    {cell.render("Cell")}
-                  </td>
-                );
-              })}
+    <div className="table-container">
+      <table className="table" {...getTableProps()}>
+        <thead className="table-header">
+          {headerGroups.map((headerGroup) => (
+            <tr
+              className="table-header--row"
+              {...headerGroup.getHeaderGroupProps()}
+            >
+              {headerGroup.headers.map((column) => (
+                <th
+                  className="table-header--cell"
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                >
+                  <div>
+                    <span
+                      className={`table-header--sort-icon${
+                        column.isSorted ? " active" : ""
+                      }`}
+                    >
+                      {column.isSortedDesc ? (
+                        <CaretDownOutlined />
+                      ) : (
+                        <CaretUpOutlined />
+                      )}
+                    </span>
+                    {column.render("Header")}
+                  </div>
+                </th>
+              ))}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody className="table-body" {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr className="table-body--row" {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td className="table-body--cell" {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

@@ -1,3 +1,12 @@
+.table-container {
+  overflow-x: auto;
+}
+
+.input-bar,
+.table {
+  margin: auto;
+}
+
 .table-header--row {
   background-color: #e1e1e1;
   font-weight: bold;
@@ -5,9 +14,7 @@
 }
 
 .table-header--cell {
-  text-align: left;
   min-width: 20vw;
-  /* min-width: em; */
 }
 
 .table-header--cell>div {
@@ -20,7 +27,7 @@
 .table-header--sort-icon {
   float: right;
   opacity: 0;
-  padding-left: .5em;
+  padding-right: .5em;
 
   color: #2e5f96;
 }
@@ -39,7 +46,7 @@
 }
 
 .table-body--cell {
-  text-align: left;
+  text-align: right;
 }
 
 .table-body--cell,
@@ -53,7 +60,8 @@
   flex-direction: row;
   justify-content: center;
   align-items: stretch;
-  padding: 1em;
+  padding-block: 1em;
+  overflow-x: auto;
 }
 
 .input--date {
@@ -64,6 +72,11 @@
 .input--button {
   width: 8em;
   padding: .5em !important;
+}
+
+.input--date,
+.input--button {
+  min-width: 80px;
 }
 
 .input--button:hover {
