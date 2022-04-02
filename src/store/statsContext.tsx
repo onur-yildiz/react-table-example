@@ -5,13 +5,6 @@ const API_URL =
     ? "https://spcase-server.herokuapp.com"
     : "http://localhost:5234";
 
-interface Stats {
-  conract: string;
-  totalTransactionFee: number;
-  totalTransactionAmount: number;
-  weightedAveragePrice: number;
-}
-
 interface StatsContextProps {
   stats: Stats[];
   isLoading: boolean;
