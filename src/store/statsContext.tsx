@@ -1,5 +1,10 @@
 import { createContext, useState } from "react";
 
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://spcase-server.herokuapp.com"
+    : "http://localhost:5234";
+
 interface Stats {
   conract: string;
   totalTransactionFee: number;
@@ -26,7 +31,7 @@ export const StatsContextProvider = (props: any) => {
   const fetchStats = async (startDate: string, endDate: string) => {
     setIsLoading(true);
     const response = await fetch(
-      `http://localhost:5234/intra-day-trade-history-summary?startDate=${startDate}&endDate=${endDate}`
+      `${API_URL}/intra-day-trade-history-summary?startDate=${startDate}&endDate=${endDate}`
     );
     const data = (await response.json()) as Stats[];
     setStats(data);
