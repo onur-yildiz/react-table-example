@@ -23,11 +23,7 @@ const DateInputBar = () => {
         value={endDate}
       />
       <button className="input--button" type="submit" onClick={handleSubmit}>
-        {isLoading ? (
-          <div className="loading-indicator" />
-        ) : (
-          <span>Göster</span>
-        )}
+        {isLoading ? <div className="loading-indicator" /> : <span>Ara</span>}
       </button>
     </div>
   );
