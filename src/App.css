@@ -25,6 +25,7 @@
 }
 
 .table-header--cell>div {
+  padding-inline: .5em;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -34,7 +35,6 @@
 .table-header--sort-icon {
   float: right;
   opacity: 0;
-  padding-right: .5em;
 
   color: #2e5f96;
 }
