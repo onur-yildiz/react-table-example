@@ -86,14 +86,17 @@
   overflow-x: auto;
 }
 
+.input-bar * {
+  font-size: 1.1em;
+}
+
 .input--date {
   width: calc(30% - 1em);
   padding: 0 1em !important;
 }
 
 .input--button {
-  /* width: 8em;
-  padding: .5em !important; */
+  width: calc(15% - 1em);
   display: flex;
   align-items: center;
   justify-content: center;
