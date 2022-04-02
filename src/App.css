@@ -1,5 +1,10 @@
 .table-container {
   overflow-x: auto;
+
+  margin-bottom: 1em;
+
+  /* 4em (input-bar height) + 1em (margin-bottom) + 2em (input-bar padding-block) */
+  height: calc(100vh - 7em);
 }
 
 .input-bar,
@@ -7,14 +12,16 @@
   margin: auto;
 }
 
+.table-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
 .table-header--row {
   background-color: #e1e1e1;
   font-weight: bold;
   font-size: 1.1em;
-}
-
-.table-header--cell {
-  min-width: 20vw;
 }
 
 .table-header--cell>div {
@@ -35,6 +42,20 @@
 .table-header--sort-icon.active {
   float: right;
   opacity: 1;
+}
+
+.table-header,
+.table-body--row {
+  display: table;
+  min-width: 50em;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table-body {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .table-body--row {
