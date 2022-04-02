@@ -6,7 +6,7 @@ import StatsContext from "../store/statsContext";
 const DateInputBar = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const { fetchStats } = useContext(StatsContext);
+  const { fetchStats, isLoading } = useContext(StatsContext);
 
   const handleSubmit = () => {
     fetchStats(format(startDate, "yyyy-MM-dd"), format(endDate, "yyyy-MM-dd"));
@@ -23,7 +23,11 @@ const DateInputBar = () => {
         value={endDate}
       />
       <button className="input--button" type="submit" onClick={handleSubmit}>
-        Ara
+        {isLoading ? (
+          <div className="loading-indicator" />
+        ) : (
+          <span>Göster</span>
+        )}
       </button>
     </div>
   );
