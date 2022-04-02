@@ -1,6 +1,6 @@
 import { parse, format } from "date-fns";
 import { useContext, useEffect, useMemo } from "react";
-import { Column, useSortBy, useTable } from "react-table";
+import { Column, Row, SortByFn, useSortBy, useTable } from "react-table";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import StatsContext from "../store/statsContext";
 
@@ -9,55 +9,91 @@ const DataTable = () => {
 
   const data = useMemo(
     () =>
-      stats.map((stat) => {
-        const currencyLocaleOptions: Intl.NumberFormatOptions = {
-          maximumFractionDigits: 2,
-        };
+      stats.map((statsItem): Stats => {
         return {
-          date: format(
-            parse(stat.conract.substring(2), "yyMMddHH", new Date()),
-            "dd.MM.yyyy HH:mm"
-          ),
-          totalTransactionAmount: stat.totalTransactionAmount.toFixed(2),
-          totalTransactionFee: stat.totalTransactionFee.toLocaleString(
-            "tr",
-            currencyLocaleOptions
-          ),
-          weightedAveragePrice: stat.weightedAveragePrice.toLocaleString(
-            "tr",
-            currencyLocaleOptions
-          ),
+          conract: statsItem.conract,
+          totalTransactionAmount: statsItem.totalTransactionAmount,
+          totalTransactionFee: statsItem.totalTransactionFee,
+          weightedAveragePrice: statsItem.weightedAveragePrice,
         };
       }),
     [stats]
   );
 
-  const columns: Column<{
-    date: string;
-    totalTransactionAmount: string;
-    totalTransactionFee: string;
-    weightedAveragePrice: string;
-  }>[] = useMemo(
-    () => [
+  const columns: Column<Stats>[] = useMemo(() => {
+    const currencyLocaleOptions: Intl.NumberFormatOptions = {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
+      style: "currency",
+      currency: "TRY",
+    };
+
+    const sortHandler: SortByFn<Stats> = (
+      a: Row<Stats>,
+      b: Row<Stats>,
+      id: string
+      // desc: boolean | undefined
+    ): number => {
+      switch (id) {
+        case "date":
+          const [aDate, bDate] = [
+            parse(a.values[id], "dd.MM.yyyy HH:mm", new Date()),
+            parse(b.values[id], "dd.MM.yyyy HH:mm", new Date()),
+          ];
+
+          return bDate.getTime() - aDate.getTime();
+        case "tta":
+          return (
+            a.original.totalTransactionAmount -
+            b.original.totalTransactionAmount
+          );
+        case "ttf":
+          return (
+            a.original.totalTransactionFee - b.original.totalTransactionFee
+          );
+        case "wap":
+          return (
+            a.original.weightedAveragePrice - b.original.weightedAveragePrice
+          );
+
+        default:
+          return 0;
+      }
+    };
+
+    return [
       {
         Header: "Tarih",
-        accessor: "date",
+        id: "date",
+        accessor: (a) =>
+          format(
+            parse(a.conract.substring(2), "yyMMddHH", new Date()),
+            "dd.MM.yyyy HH:mm"
+          ),
+        sortType: sortHandler,
       },
       {
         Header: "Toplam İşlem Miktarı (MWh)",
-        accessor: "totalTransactionAmount",
+        id: "tta",
+        accessor: (a) => a.totalTransactionAmount.toFixed(2),
+        sortType: sortHandler,
       },
       {
         Header: "Toplam İşlem Tutarı (TL)",
-        accessor: "totalTransactionFee",
+        id: "ttf",
+        accessor: (a) =>
+          a.totalTransactionFee.toLocaleString("tr-TR", currencyLocaleOptions),
+        sortType: sortHandler,
       },
       {
         Header: "Ağırlık Ortalama Fiyat (TL/MWh)",
-        accessor: "weightedAveragePrice",
+        id: "wap",
+        accessor: (a) =>
+          a.weightedAveragePrice.toLocaleString("tr-TR", currencyLocaleOptions),
+        sortType: sortHandler,
       },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useSortBy);
