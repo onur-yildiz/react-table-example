@@ -9,15 +9,26 @@ const DataTable = () => {
 
   const data = useMemo(
     () =>
-      stats.map((stat) => ({
-        date: format(
-          parse(stat.conract.substring(2), "yyMMddHH", new Date()),
-          "yyyy-MM-dd HH:mm"
-        ),
-        totalTransactionAmount: stat.totalTransactionAmount.toFixed(2),
-        totalTransactionFee: stat.totalTransactionFee.toFixed(2),
-        weightedAveragePrice: stat.weightedAveragePrice.toFixed(2),
-      })),
+      stats.map((stat) => {
+        const currencyLocaleOptions: Intl.NumberFormatOptions = {
+          maximumFractionDigits: 2,
+        };
+        return {
+          date: format(
+            parse(stat.conract.substring(2), "yyMMddHH", new Date()),
+            "yyyy-MM-dd HH:mm"
+          ),
+          totalTransactionAmount: stat.totalTransactionAmount.toFixed(2),
+          totalTransactionFee: stat.totalTransactionFee.toLocaleString(
+            "tr",
+            currencyLocaleOptions
+          ),
+          weightedAveragePrice: stat.weightedAveragePrice.toLocaleString(
+            "tr",
+            currencyLocaleOptions
+          ),
+        };
+      }),
     [stats]
   );
 
