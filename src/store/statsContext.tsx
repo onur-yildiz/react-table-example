@@ -23,13 +23,20 @@ export const StatsContextProvider = (props: any) => {
 
   const fetchStats = async (startDate: string, endDate: string) => {
     setIsLoading(true);
-    const response = await fetch(
-      `${API_URL}/intra-day-trade-history-summary?startDate=${startDate}&endDate=${endDate}`
-    );
-    const data = (await response.json()) as Stats[];
-    setStats(data);
+
+    try {
+      const response = await fetch(
+        `${API_URL}/intra-day-trade-history-summary?startDate=${startDate}&endDate=${endDate}`
+      );
+      const data = (await response.json()) as Stats[];
+      console.table(data);
+      setStats(data);
+    } catch (error) {
+      setStats([]);
+      console.log(error);
+    }
+
     setIsLoading(false);
-    console.log(stats);
   };
 
   return (
