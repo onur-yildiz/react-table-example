@@ -1,10 +1,8 @@
 .table-container {
   overflow-x: auto;
 
-  margin-bottom: 1em;
-
-  /* 4em (input-bar height) + 1em (margin-bottom) + 2em (input-bar padding-block) */
-  height: calc(100vh - 7em);
+  /* 4em (input-bar height) + 2em (input-bar padding-block) */
+  height: calc(100vh - 6em);
 }
 
 .input-bar,
@@ -47,7 +45,7 @@
 .table-header,
 .table-body--row {
   display: table;
-  min-width: 50em;
+  min-width: 35em;
   width: 100%;
   table-layout: fixed;
 }
@@ -141,5 +139,28 @@
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .input-bar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: unset;
+  }
+
+  .input--date,
+  .input--button {
+    height: 2.5em;
+  }
+
+  .input--date {
+    flex: 1;
+  }
+
+  .input--button {
+    width: 100%;
   }
 }
