@@ -1,7 +1,6 @@
 import { parse, format } from "date-fns";
 import { useContext, useEffect, useMemo } from "react";
 import { Column, Row, SortByFn, useSortBy, useTable } from "react-table";
-import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import StatsContext from "../store/statsContext";
 
 const DataTable = () => {
@@ -133,11 +132,7 @@ const DataTable = () => {
                         column.isSorted ? " active" : ""
                       }`}
                     >
-                      {column.isSortedDesc ? (
-                        <CaretDownOutlined />
-                      ) : (
-                        <CaretUpOutlined />
-                      )}
+                      {column.isSortedDesc ? "▼" : "▲"}
                     </span>
                     {column.render("Header")}
                   </div>
